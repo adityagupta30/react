@@ -5,11 +5,11 @@
 import Chai from "./chai"
 
 function App() {
- 
+ const username = "chai aur code"
   return (
     <>
       <Chai/>
-   <h1>chai aur react</h1>
+   <h1>chai aur react {username}</h1> // evaluated expression {}
     <p>test para</p>
     </>
    
