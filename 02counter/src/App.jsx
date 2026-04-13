@@ -13,12 +13,18 @@ function App() {
     
     
   //  counter = counter +1
-  setCounter(counter +1)
+
+  // yha functional update ho rha hai jo latest state value deti hai isliye ye har baar +1 hoga
+  setCounter(prevcounter=> prevcounter +1)
+  setCounter(prevcounter=> prevcounter+1)
+  setCounter(prevcounter=> prevcounter+1)
+  setCounter(prevcounter=> prevcounter+1)
+  setCounter(prevcounter=> prevcounter+1)
   }
 
   const removeValue = ()=>{
    setCounter(counter - 1)
-    
+ 
   }
   
 
@@ -30,11 +36,13 @@ function App() {
 
       <button 
       onClick={addValue}
-      >Add value</button>
+      >Add value{counter}</button>
       <br />
+
+      
       <button
       onClick={removeValue}
-      >remove value{counter}</button>
+      >Remove value{counter}</button>
       <p>footer:{counter}</p>
     </>
   )
