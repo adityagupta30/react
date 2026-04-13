@@ -13,7 +13,7 @@ function App() {
     
     
   //  counter = counter +1
-
+    // pehle state update ho rha tha (counter=counter+1)me jisse wo value whi reh rhi thi 
   // yha functional update ho rha hai jo latest state value deti hai isliye ye har baar +1 hoga
   setCounter(prevcounter=> prevcounter +1)
   setCounter(prevcounter=> prevcounter+1)
