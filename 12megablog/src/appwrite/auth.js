@@ -1,4 +1,4 @@
- import conf from '../conf.js';
+ import conf from '../conf/conf.js';
  import {Client, Account, ID} from "appwrite";
 
 
@@ -65,4 +65,4 @@ async logout(){
  }
 const authService = new AuthService();
 
- export default AuthService
+ export default authService;
