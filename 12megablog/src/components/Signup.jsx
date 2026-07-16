@@ -54,10 +54,10 @@ function Signup() {
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
                         <Input
-                        labe="Full Name:"
+                        label="Full Name:"
                         placeholder="Enter your full name"
                         {...register("name",{
-                            register:true,
+                            required:true,
                         })}
                         />
                         <Input 
@@ -67,7 +67,7 @@ function Signup() {
                                         {...register("email",{
                                             required:true,
                                             validate:{
-                                                matchpatern:(value)=>/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                                                matchPattern:(value)=>/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
                                                 "Email address must be a valid address",
                                              }
                                         })}

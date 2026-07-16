@@ -1,4 +1,4 @@
- import conf from '../conf.js';
+ import conf from '../conf/conf.js';
  import {Client,ID,Databases,Query,Storage} from "appwrite";
 
 export class Service{
@@ -12,7 +12,7 @@ export class Service{
                 .setEndpoint(conf.appwriteUrl)
                 .setProject(conf.appwriteProjectId);
         this.databases= new Databases(this.client);
-        this.bucket= new Storage();
+        this.bucket= new Storage(this.client);
     }
 
     async createPost ({title ,slug,content,featuredImage,status,userId}){
@@ -82,7 +82,7 @@ export class Service{
         }
      }
 
-     async getPost(queries = [Query.equal("status","active")]){
+     async getPosts(queries = [Query.equal("status","active")]){
             try {
                 return await this.databases.listDocuments(
                     conf.appwriteDatabaseId,
@@ -90,7 +90,7 @@ export class Service{
                     queries
                     
 
-                )
+                );
             } catch (error) {
                 console.log("Appwrite service :: getPost :: error ", error);
                 
@@ -103,7 +103,7 @@ export class Service{
      async uploadFile(file){
         try {
             return await this.bucket.createFile(
-                conf.AppwriteBucketId,
+                conf.appwriteBucketId,
                 ID.unique(),
                 file
             )
@@ -117,7 +117,7 @@ export class Service{
      async deleteFile(fileId){
         try {
             await this.bucket.deleteFile(
-                conf.AppwriteBucketId,
+                conf.appwriteBucketId,
                 fileId
             )
             return true
@@ -129,8 +129,8 @@ export class Service{
 
 
      getFilePreview(fileid){
-        return this.getFilePreview(
-            conf.AppwriteBucketId,
+        return this.bucket.getFilePreview(
+            conf.appwriteBucketId,
             fileid
         )
      }

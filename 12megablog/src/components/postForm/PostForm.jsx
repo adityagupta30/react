@@ -16,7 +16,7 @@ import React ,{useCallback}from 'react'
             }
         })
         const navigate = useNavigate()
-        const userData = useSelector(state => state.user.userData)
+        const userData = useSelector((state) => state.auth.userData)
 
         const submit = async (data) => {
             if(post){
@@ -33,7 +33,7 @@ import React ,{useCallback}from 'react'
                 ...data,
               featuredImage: file ? file.$id : undefined,
             }
-        )
+        );
             if (dbPost){
                 navigate(`/post/${dbPost.$id}`)
             }
@@ -64,23 +64,23 @@ import React ,{useCallback}from 'react'
                 .replace(/ ^[a-zA-Z\d\s]+/g,'-')
                 .replace(/ \s/g,'-')
                 
-            return ''
+            return "";
 
          },[])
 
          React.useEffect(()=>{
-            const subscription = watch(()=>{
+            const subscription = watch((value,{name})=>{
                 if(name === 'title'){
-                    setValue('slug',slugTransform(value.title,
-                        {shouldValidate: true}))
+                    setValue('slug',slugTransform(value.title),
+                        {shouldValidate: true})
 
                 }
-            })
+            });
                  
 
-            return()=>{
+            return()=>
                 subscription.unsubscribe()
-            }
+            
 
          },[watch,slugTransform,setValue])
 
