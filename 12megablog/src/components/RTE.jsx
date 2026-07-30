@@ -13,15 +13,16 @@ export default function RTE({name,control,label,
                 <Controller
                 name ={name || "content"}
                 control={control}
-                render={({field:{onChange}})=>(
-                    <Editor
-        initialValue={defaultValue}
+                defaultValue={defaultValue}
+               render={({ field }) => (
+    <Editor
+        apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+        value={field.value}
+        onEditorChange={field.onChange}
         init={{
-            initialValue: defaultValue,
             height: 500,
             menubar: true,
             plugins: [
-                "image",
                 "advlist",
                 "autolink",
                 "lists",
@@ -37,18 +38,14 @@ export default function RTE({name,control,label,
                 "insertdatetime",
                 "media",
                 "table",
-                "code",
                 "help",
                 "wordcount",
-                "anchor",
             ],
             toolbar:
-            "undo redo | blocks | image | bold italic forecolor | alignleft aligncenter bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |removeformat | help",
-            content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                "undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | image | code",
         }}
-        onEditorChange={onChange}
-        />
-                )}
+    />
+)}
                 />
 
         </div>

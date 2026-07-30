@@ -2,7 +2,10 @@ import React from "react";
 import appwriteService from "../appwrite/config";
 import { Link } from "react-router-dom";
 
-function Postcard({ $id, title, featuredImage }) {
+function Postcard({ $id, title, featuredimage }) {
+  console.log("POST:", { $id, title, featuredimage });
+    console.log("TYPE:", typeof featuredimage);
+
   return (
     <Link to={`/post/${$id}`}>
       <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
@@ -10,7 +13,7 @@ function Postcard({ $id, title, featuredImage }) {
         {/* Image */}
         <div className="overflow-hidden">
           <img
-            src={appwriteService.getFilePreview(featuredImage)}
+            src={appwriteService.getFilePreview(featuredimage)}
             alt={title}
             className="w-full h-56 object-cover hover:scale-110 transition-transform duration-500"
           />

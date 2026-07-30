@@ -18,51 +18,73 @@ import React ,{useCallback}from 'react'
         const navigate = useNavigate()
         const userData = useSelector((state) => state.auth.userData)
 
-        const submit = async (data) => {
-            if(post){
-                const file = data.image[0] ? await appwriteService.
-                uploadFile(data.image[0]):null
+      const submit = async (data) => {
+    console.log("Submit Function Clicked");
+    console.log("Form Data:", data);
+
+    try {
+        if (post) {
+            const file = data.image[0]
+                ? await appwriteService.uploadFile(data.image[0])
+                : null;
+
+            console.log("Uploaded File:", file);
+
+            if (file) {
+                await appwriteService.deleteFile(post.featuredimage);
             }
 
-            if (file){
-                appwriteService.deleteFile(post.featuredImage)
-            }
-
-            const dbPost = await appwriteService.updatePost
-           (post.$id,{
+            const dbPost = await appwriteService.updatePost(post.$id, {
                 ...data,
-              featuredImage: file ? file.$id : undefined,
-            }
-        );
-            if (dbPost){
-                navigate(`/post/${dbPost.$id}`)
-            }
-            else{
-                const file= await appwriteService.uploadFile(data.image[0]);
+                featuredimage: file ? file.$id : post.featuredimage,
+            });
 
-                if(file){
-                    const fileId = file.$id
-                    data.featuredImage = fileId
-                    const dbPost =await appwriteService.createPost({
-                        ...data,
-                        userId: userData.$id,
-                    })
+            console.log("Updated Post:", dbPost);
 
-                    if(dbPost){
-                        navigate(`/post/${dbPost.$id}`)
-                    }
-                }
+            if (dbPost) {
+                navigate(`/post/${dbPost.$id}`);
             }
 
-            
+        } else {
+
+            console.log("Uploading file...");
+
+            const file = await appwriteService.uploadFile(data.image[0]);
+
+            console.log("Uploaded File:", file);
+
+            if (!file) {
+                console.log("File upload failed");
+                return;
+            }
+
+            const dbPost = await appwriteService.createPost({
+                title: data.title,
+                slug: data.slug,
+                content: data.content,
+                featuredimage: file.$id,
+                status: data.status,
+                userId: userData.$id,
+            });
+
+            console.log("Created Post:", dbPost);
+
+            if (dbPost) {
+                navigate(`/post/${dbPost.$id}`);
+            }
         }
 
+    } catch (error) {
+        console.error("Submit Error:", error);
+    }
+};
          const slugTransform = useCallback((value)=>{
             if (value && typeof value === 'string') 
-                return value.trim()
+                return value
+                .trim()
                 .toLowerCase()
-                .replace(/ ^[a-zA-Z\d\s]+/g,'-')
-                .replace(/ \s/g,'-')
+                .replace(/[^\w\s-]/g, "")
+                .replace(/\s+/g, "-")
                 
             return "";
 
@@ -85,7 +107,14 @@ import React ,{useCallback}from 'react'
          },[watch,slugTransform,setValue])
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+       <form
+    onSubmit={(e) => {
+        e.preventDefault();
+        console.log("FORM SUBMITTED");
+        handleSubmit(submit)(e);
+    }}
+    className="flex flex-wrap"
+>
             <div className="w-2/3 px-2">
                 <Input
                     label="Title :"
@@ -115,7 +144,7 @@ import React ,{useCallback}from 'react'
                 {post && (
                     <div className="w-full mb-4">
                         <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
+                            src={appwriteService.getFilePreview(post.featuredimage)}
                             alt={post.title}
                             className="rounded-lg"
                         />

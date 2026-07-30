@@ -24,9 +24,9 @@ export class Service{
                 {
                     title,
                     content,
-                    featuredImage,
+                   featuredimage: featuredImage,
                     status,
-                    userId,
+                    userid: userId, 
                 }
             )
         } catch (error) {
@@ -44,7 +44,7 @@ export class Service{
                     {
                         title,
                         content,
-                        featuredImage,
+                        featuredimage: featuredImage,
                         status,
                     }
                  )
@@ -129,6 +129,7 @@ export class Service{
 
 
      getFilePreview(fileid){
+        console.log("FILE ID =", fileid);
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
             fileid
