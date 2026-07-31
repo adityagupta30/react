@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from "react";
 import appwriteService from "../appwrite/config";
-import { Container, Postcard } from "../components";
+import { Container, Postcard, Loader } from "../components";
 import HeroSection from "../components/HeroSection";
 import FeaturedSection from "../components/FeaturedSection";
 import CategorySection from "../components/CategorySection";
 import SearchBar from "../components/SearchBar";
+
 
 function Home() {
     const [search, setSearch] = useState("");
 
     const [posts, setPosts] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         appwriteService.getPosts([]).then((posts) => {
             if (posts) {
                 setPosts(posts.documents);
             }
-        });
+        })
+         .finally(() => setLoading(false));
     }, []);
 
     const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase())
 );
+if (loading) {
+    return <Loader />;
+}
 
     return (
+        
         <>
+              
+
                  <HeroSection />
 
                 <FeaturedSection />

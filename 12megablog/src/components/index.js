@@ -14,6 +14,8 @@ import PostForm from "./postForm/PostForm";
 import Postcard from "./Postcard"
 import AuthLayout from "./AuthLayout"
 import Input from "./Input"
+
+export { default as Loader } from "./Loader";
  export {
     Header,
     Footer,

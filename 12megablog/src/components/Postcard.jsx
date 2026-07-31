@@ -10,14 +10,19 @@ function Postcard({ $id, title, featuredimage }) {
     <Link to={`/post/${$id}`}>
       <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
 
+
         {/* Image */}
-        <div className="overflow-hidden">
-          <img
-            src={appwriteService.getFilePreview(featuredimage)}
-            alt={title}
-            className="w-full h-56 object-cover hover:scale-110 transition-transform duration-500"
+        <img
+           src={
+             featuredimage
+            ? appwriteService.getFilePreview(featuredimage)
+            : "https://placehold.co/600x400?text=No+Image"
+           }
+              alt={title}
+             className="w-full h-56 object-cover hover:scale-110 transition-transform duration-500"
           />
-        </div>
+
+
 
         {/* Content */}
         <div className="p-5">

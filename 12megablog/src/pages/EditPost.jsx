@@ -9,6 +9,8 @@ function EditPost() {
     const {slug} = useParams()
     const navigate = useNavigate()
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(()=>{
         if (slug){
             appwriteService.getPost(slug).then((post)=>{
@@ -16,10 +18,16 @@ function EditPost() {
                     setPost(post)
                 }
             })
+             .finally(() => setLoading(false));
         } else {
             navigate("/")
         }
     },[slug,navigate])
+
+    if (loading) {
+    return <Loader />;
+}
+
     return post ? (
         <div className='py-8'>
             <Container>

@@ -14,6 +14,7 @@ import EditPost from "./pages/EditPost.jsx"
 
 import Post from "./pages/Post.jsx"
 import AllPosts from"./pages/AllPosts.jsx"
+import NotFound from "./pages/NotFound";
 
 const router  = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router  = createBrowserRouter([
           </AuthLayout>
         ),
       },
+      
       {
         path:"/all-posts",
         element:(
@@ -58,6 +60,7 @@ const router  = createBrowserRouter([
          </AuthLayout>
         ),
       },
+
       {
         path:"/edit-post/:slug",
         element:(
@@ -67,10 +70,17 @@ const router  = createBrowserRouter([
           </AuthLayout>
         ),
       },
+
       {
         path:"/post/:slug",
         element:<Post />
       },
+
+      {
+    path: "*",
+    element: <NotFound />,
+      },
+
     ],
   },
 ])

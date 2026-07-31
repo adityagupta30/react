@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import appwriteService from "../appwrite/config";
-import { Container, Postcard } from "../components";
-
+import { Container, Postcard, Loader } from "../components";
 function AllPosts() {
 
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -12,9 +12,14 @@ function AllPosts() {
             if (posts) {
                 setPosts(posts.documents);
             }
-        });
+        })
+          .finally(() => setLoading(false));
 
     }, []);
+       
+      if (loading) {
+    return <Loader />;
+}
 
     return (
         <div className="w-full py-8">

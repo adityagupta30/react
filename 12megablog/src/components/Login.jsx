@@ -5,6 +5,8 @@
  import { useDispatch } from 'react-redux'
  import authService from '../appwrite/auth'
  import {useForm} from 'react-hook-form'
+import { toast } from "react-toastify";
+
  function Login() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -16,6 +18,7 @@
         try {
            const session= await authService.login(data)
            if (session) {
+             toast.success("Welcome Back!");
             const userData =await authService.getCurrentUser()
             if(userData) dispatch(authLogin(userData));
             navigate("/")

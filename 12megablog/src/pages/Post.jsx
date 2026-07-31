@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container } from "../components";
+import { Button, Container, Loader  } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function Post() {
     const [post, setPost] = useState(null);
     const { slug } = useParams();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     const userData = useSelector((state) => state.auth.userData);
 
@@ -26,28 +28,60 @@ export default function Post() {
                 } else {
                     navigate("/");
                 }
-            });
+            })
+            .finally(() => setLoading(false));
         } else {
             navigate("/");
         }
     }, [slug, navigate]);
 
-    const deletePost = () => {
-        appwriteService.deletePost(post.$id).then((status) => {
-            if (status) {
-                // Database me featuredimage hai
-                appwriteService.deleteFile(post.featuredimage);
-                navigate("/");
+ const deletePost = async () => {
+
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this post?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+
+        const status = await appwriteService.deletePost(post.$id);
+
+        if (status) {
+
+            if (post.featuredimage) {
+                await appwriteService.deleteFile(post.featuredimage);
             }
-        });
-    };
+
+            toast.success("🗑️ Post Deleted Successfully!");
+
+            navigate("/");
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+        toast.error(
+            error?.message || "Failed to delete post."
+        );
+    }
+};
+
+if (loading) {
+    return <Loader />;
+}
 
     return post ? (
         <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
-                        src={appwriteService.getFilePreview(post.featuredimage)}
+                        src={
+                            post.featuredimage
+                                ? appwriteService.getFilePreview(post.featuredimage)
+                                : "https://placehold.co/900x500?text=No+Image"
+                        }
                         alt={post.title}
                         className="rounded-xl"
                     />
